@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>scope</title>
+</head>
+<body>
+
+<!--let-->
+<script type="text/javascript">
+    var name = "global var";
+    console.log(name);
+
+    function home(){
+        var homevar = "homevar";
+        for(var i=0; i<100;i++){} // var는 전역변수, let,const는 지역변수
+        // console.log(i);
+
+        if(true){
+            let myif = "myif";
+        }
+        // console.log(myif);
+    }
+
+    home();
+
+</script>
+
+<!--let과 closure-->
+<ul>
+    <li>javascript</li>
+    <li>java</li>
+    <li>python</li>
+    <li>django</li>
+</ul>
+<script type="text/javascript">
+    var list = document.querySelectorAll("li");
+    for(let i=0;i<list.length;i++){
+        list[i].addEventListener("click",function(){
+            console.log(i+1+"번째 리스트입니다.")
+        })
+    }
+</script>
+
+<!-- const - 선언된 변수 지키기-->
+<script type="text/javascript">
+    function home(){
+        const  homename = 'my house';
+        // homename = "your house";
+        console.log(homename);
+        //const를 기본으로 사용한다.
+        //그런데 변경이 될 수 있는 변수는 let을 사용한다.
+        //var는 사용하지 않는다.
+    }
+</script>
+
+<!-- const 특성과 immutable array-->
+<script type="text/javascript">
+    const list1 = ["apple", "orange", "watermelon"];
+    list1.push("banana");
+    console.log(list1);
+
+    list2=[].concat(list1,"melon");
+    console.log(list1 == list2);
+
+</script>
+</body>
+</html>
