@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Array</title>
+</head>
+<body>
+
+<!-- for of-->
+<script type="text/javascript">
+    var data =[1,2,undefined,NaN,null,""];
+
+    for(let idx of data){
+        console.log(idx);
+    }
+
+    var str = "hello world!!!";
+    for(let value of str){
+        console.log(value);
+    }
+</script>
+
+
+<!-- spread operator, 펼침 연산자-->
+<script type="text/javascript">
+    let pre = ["apple","orange",100]
+    let newData =[...pre];
+    console.log(pre);
+    console.log(newData);
+    console.log(pre==newData);
+</script>
+
+<!-- spread operator, 몇가지 활용-->
+<script type="text/javascript">
+    let pre1 = [100, 200, "hello", null];
+
+    let newData1 = [0,1,2,3,...pre,4];
+
+    console.log(newData1);
+
+    function sum(a,b,c) {
+        return a+b+c;
+    }
+
+    let pre2 = [100,200,300];
+
+    console.log(sum(...pre2))
+</script>
+
+<!-- from 메서드로 진짜 배열 만들기-->
+<script type="text/javascript">
+
+    function addMark(){
+
+        /*let newData =[];
+        for(let i=0; i<arguments.length; i++){
+            newData.push(arguments[i]+ "!");
+        }*/
+        let newArray = Array.from(arguments);
+        let newData3 = newArray.map(function(value){
+            return value+"!";
+        });
+
+        console.log(newData3);
+    }
+
+    addMark(1,2,3,4,5,6,7,8,9);
+</script>
+</body>
+</html>
