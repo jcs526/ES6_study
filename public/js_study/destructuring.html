@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Distructuring</title>
+</head>
+<body>
+<!-- destructuring -->
+<script>
+    let data = ["crong", "honux", "jk", "jinny"];
+    let [jisu, , jung] = data;
+
+    console.log(jisu, jung);
+
+</script>
+
+<!-- destructuring Object -->
+<script>
+
+    let obj = {
+        name: "crong",
+        address: "Korean",
+        age: 10
+    }
+
+    let {name, age} = obj;
+    console.log(name, age);
+
+    let {name: myName, age: myAge} = obj;
+    console.log(myName, myAge);
+
+</script>
+
+<!-- destructuring 활용 JSON 파싱 -->
+<script>
+
+    let news = [
+        {
+            "title": "sbs",
+            "imgurl": "http:123",
+            "newslist" : ["첫번째 뉴스", "두번째 뉴스"]
+        }, {
+            "title": "mbc",
+            "imgurl": "http:456",
+            "newslist" : ["mbc 특종1", "mbc 특종2"]
+        }
+    ];
+
+    let [,mbc] = news;
+    console.log(mbc);
+
+    let {title,imgurl} = mbc;
+    console.log(title,imgurl);
+
+    let [,{title:title1,imgurl:url}] = news;
+    console.log(url);
+
+</script>
+
+
+<div> div </div>
+
+
+<!-- Destructuring 활용_Event객체전달 -->
+<script>
+    function getNewsList([,{newslist}]) {
+        console.log(newslist);
+    }
+
+    getNewsList(news);
+
+    document.querySelector("div").addEventListener("click",function({target}){
+        console.log(target.tagName);
+    });
+</script>
+</body>
+</html>
