@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Map</title>
+</head>
+<body>
+<!--Map & WeakMap 추가정보를 담은 객체저장하기-->
+<script>
+    let wm = new WeakMap();
+    let myfun = function () {
+
+    };
+
+    wm.set(myfun, 0);
+
+    console.log(wm);
+
+    let count=0;
+    for (let i = 0; i < 10; i++) {
+        count = wm.get(myfun);
+        count++;
+        wm.set(myfun, count);
+    }
+
+    console.log(wm.get(myfun));
+    myfum = null;
+    console.log(wm.has(myfum));
+</script>
+<!--WeakMap 클래스 인스턴스 변수 보호하기-->
+<script>
+
+    const wm1 = new WeakMap();
+
+    function Area(height, width) {
+       /* this.height = height;
+        this.width = width;*/
+        wm1.set(this,{height, width});
+    }
+
+    Area.prototype.getArea = function () {
+        // return this.height*this.width;
+        const {height, width} = wm1.get(this);
+        return height*width;
+    };
+
+    let myarea = new Area(10, 20);
+    console.log(myarea.getArea());
+</script>
+</body>
+</html>
