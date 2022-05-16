@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lotto</title>
+</head>
+<body>
+<script>
+    const SETTING = {
+        name: "LUCKY Lotto",
+        count: 6,
+        maxNumber: 45
+    }
+
+    <!-- 내꺼 -->
+    let numberList = new Set();
+
+    function getRandomNumber(maxNumber) {
+        while (numberList.size < 6) {
+            let number = Math.floor(Math.random() * 45) + 1;
+            if (numberList.has(number)) {
+                console.log("false");
+                continue;
+            } else {
+                numberList.add(number);
+                console.log(number);
+            }
+        }
+        console.log(numberList);
+    }
+
+    getRandomNumber();
+
+
+    <!-- 개선한거 -->
+    let lotto = new Set();
+    let {count, maxNumber} = SETTING;
+
+    function getRandomNumber_new(maxNumber,count) {
+
+        while (lotto.size < count) {
+            let num = Math.floor(Math.random() * maxNumber + 1);
+            lotto.add(num);
+        }
+        console.log(lotto);
+
+    }
+
+    getRandomNumber_new(maxNumber,count);
+</script>
+
+</body>
+</html>
