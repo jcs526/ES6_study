@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class</title>
+</head>
+<body>
+
+<script>
+    class Health {
+        constructor(name, lastTime) {
+            this.name = name;
+            this.lastTime = lastTime;
+        }
+
+        showHealth() {
+            console.log("안녕하세요 " + this.name);
+        }
+    }
+
+    const myHealth = new Health("crong");
+    console.log(myHealth)
+    myHealth.showHealth();
+</script>
+
+<!-- Object assign으로 Immutable 객체 만들기   -->
+<script>
+
+    const healthObj = {
+        showHealth: function () {
+            console.log("오늘 운동시간 :" + this.healthTimeout);
+        }
+    }
+
+    // const myHealth1= Object.create(healthObj);
+    //
+    // myHealth1.healthTime = "11:20";
+    // myHealth1.name = "crong";
+
+    const myHealth1 = Object.assign(Object.create(healthObj), {
+        name: "crong",
+        lastTime: "11:20",
+    });
+
+    console.log(myHealth1);
+
+</script>
+
+<!-- Object assign으로 Immutable 객체 만들기-->
+<script>
+
+    const previousObj = {
+        name: "crong",
+        lastTime: "11:20"
+    }
+
+    const myHealth2 = Object.assign({},previousObj,{
+        "name": "honux",
+        "age" : 99
+    });
+
+    console.log(myHealth2);
+    console.log(previousObj === myHealth2);
+</script>
+
+<!--  setPrototypeOf로 객체 만들기 -->
+<script>
+    const healthObj2 = {
+        showHealth: function () {
+            console.log("오늘 운동시간 :" + this.healthTimeout);
+        },
+        setHealth: function (newTime){
+            this.healthTime = newTime;
+        }
+    }
+
+    const newobj = Object.setPrototypeOf({
+        name: "crong",
+        lastTime : "11:20"
+    },healthObj2)
+
+    console.log(newobj);
+
+</script>
+
+<!-- setPrototypeOf로 객체간 prototype chain 생성하기 -->
+<script>
+    //parent
+    const healthObj3 = {
+        showHealth: function () {
+            console.log("오늘 운동시간 :" + this.healthTime);
+        },
+        setHealth : function (newTime) {
+            this.healthTime = newTime;
+        }
+    }
+
+    //child
+    const healthChildObj = {
+        getAge : function () {
+            return this.age;
+        }
+    }
+
+    Object.setPrototypeOf(healthChildObj, healthObj3);
+
+    const childObj = Object.setPrototypeOf({
+        age: 22
+    }, healthChildObj);
+
+    childObj.setHealth("11:55");
+    childObj.showHealth();
+
+    console.log(childObj)
+</script>
+</body>
+</html>
