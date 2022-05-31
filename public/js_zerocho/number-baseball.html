@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>숫자야구</title>
+</head>
+<body>
+<form id="form">
+    <input type="text" id="input">
+    <button>확인</button>
+</form>
+<div id="logs"></div>
+<script>
+    const $input = document.querySelector('#input');
+    const $form = document.querySelector('#form');
+    const $logs = document.querySelector('#logs');
+
+    const numbers = [];
+    for (let n = 0; n < 9; n++) {
+        numbers.push(n + 1);
+    }
+    const answer = [];
+    for (let i = 0; i < 4; i++) {
+        const index = Math.floor(Math.random() * numbers.length);
+        answer.push(numbers[index]);
+        numbers.splice(index, 1);
+    }
+
+    console.log(answer);
+    console.log(numbers);
+
+    const tries = [];
+    let out =0;
+
+    //검사하는 코드
+    function checkInput(input) {
+        if (input.length !== 4) {
+            return alert('4자리 숫자를 입력해주세요');
+        }
+        if (new Set(input).size !== 4) {
+            return alert('중복되지 않게 입력해주세요.');
+        }
+        if (tries.includes(input)) {
+            return alert('이미 시도한 값입니다.');
+        }
+        return true;
+    }
+
+    $form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const value = $input.value;
+        $input.value = '';
+        //입력값 문제가 있다면 종료
+        if (!checkInput(value)) {
+            return;
+        }
+        //홈런테스트
+        if (answer.join('') === value) {
+            $logs.textContent = '홈런!';
+            return;
+        }
+        if (tries.length >= 9) {
+            const message = document.createTextNode(`패배! 정답은 ${answer.join('')}`);
+            $logs.appendChild(message);
+            return;
+        }
+
+        //몇 스트라이크 몇 볼인지 검사
+        let strike = 0;
+        let ball = 0;
+
+        for (let i = 0; i <answer.length; i++){
+            const index =  value.indexOf(answer[i]);
+            if (index>-1) {
+                if (index === i) {
+                    strike += 1;
+                } else {
+                    ball += 1;
+                }
+            }
+        }
+        if (strike===0&&ball===0){
+            $logs.append('아웃입니다', document.createElement('br'))
+            out++;
+        } else {
+            $logs.append(`${value}: ${strike} 스트라이크 ${ball} 볼`, document.createElement('br'));
+        }
+
+        if (out>=3){
+            $logs.append('3아웃! 게임종료', document.createElement('br'));
+        }
+        tries.push(value);
+    })
+</script>
+</body>
+</html>
