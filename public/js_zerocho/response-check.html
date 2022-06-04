@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>반응 속도 체크</title>
+    <style>
+        #checkBox {
+            width: 400px;
+            height: 400px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="checkBox"></div>
+<button id="btn1">시작 버튼</button>
+<button id="btn2">취소</button>
+<div id="time"></div>
+</body>
+
+<script>
+    let $checkBox = document.querySelector('#checkBox');
+    let $time = document.querySelector('#time');
+    let $button = document.querySelector('#btn1');
+    let $can = document.querySelector('#btn2');
+    let preTime=0;
+    let lastTime=0;
+    let result = lastTime-preTime;
+
+
+
+    let start = ()=> setTimeout(()=>{
+        $checkBox.style.backgroundColor='blue';
+        lastTime=Date.now();
+        $checkBox.addEventListener('click', ()=>func(),{once:true})
+    },(Math.floor(Math.random()*1000)+2000));
+
+    let func = () => {
+        $time.innerHTML = "<p>랜덤시간 "+(lastTime-preTime)/1000+"초</p><br><p>반응시간 "+(Date.now()-lastTime)/1000+"초</p>"
+    }
+
+    $button.addEventListener("click", ()=>{
+        console.log("왜안대")
+        preTime=Date.now();
+        start();
+    });
+
+
+
+
+    let cancleBtn =(event)=>{
+        console.log("취소 눌렸니?")
+        $checkBox.removeEventListener('click',func, true); // 작동안함
+        $checkBox.style.backgroundColor = 'red';
+        console.log("왜 취소가 안되니?")
+    }
+    $can.addEventListener('click',cancleBtn)
+
+</script>
+</html>
