@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+    <title>form</title>
+</head>
+<body>
+    <h4>v-model은 폼 input , textarea 엘리멘트에 양방향 데이터 바인딩을 생성할수 있습니다.</h4>
+    <div id="example-1">
+        <input v-model="message" placeholder="여기를 수정해보세요.">
+        <p>메시지: {{message}}</p>
+    </div>
+
+    <script>
+        let example1 = new Vue({
+            el: '#example-1',
+            data() {
+                return {
+                    message: ''
+                }
+            },
+        })
+    </script>
+
+    <div id="example-2">
+        <span>여러 줄을 가지는 메시지:</span>
+        <p style="white-space: pre-line">{{message}}</p>
+        <br>
+        <textarea v-model="message" placeholder="여러줄을 입력해보세요"></textarea>
+    </div>
+
+    <script>
+        new Vue({
+            el:'#example-2',
+            data() {
+                return {
+                    message:''
+                }
+            },
+        })
+    </script>
+
+    <div id="example-3">
+        <input type="checkbox" id="checkbox" v-model="checked">
+        <label for="checkbox">{{checked}}</label>
+    </div>
+
+    <script>
+        new Vue({
+            el:'#example-3',
+            data(){
+                return{
+                    checked:false
+                }
+            }
+        })
+    </script>
+
+    <br>
+    <div id="example-4">
+        <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+        <label for="jack">Jack</label>
+        <input type="checkbox" id="john" value="John" v-model="checkedNames">
+        <label for="john">John</label>
+        <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+        <label for="mike">Mike</label>
+        <br>
+        <span>체크한 이름: {{checkedNames}} </span>
+    </div>
+    <script>
+        new Vue({
+            el:'#example-4',
+            data() {
+                return {
+                    checkedNames: [ "Jack"]
+                }
+            },
+        })
+    </script>
+
+    <br>
+    <div id="example-5">
+        <input type="radio" id="one" value="One" v-model="picked">
+        <label for="one">One</label>
+        <br>
+        <input type="radio" id="two" value="Two" v-model="picked">
+        <label for="two">Two</label>
+        <br>
+        <span>선택: {{picked}}</span>
+    </div>
+
+    <script>
+        new Vue({
+            el:'#example-5',
+            data() {
+                return {
+                    picked: []
+                }
+            },
+        })
+    </script>
+
+    <br>
+    <div id="example-6">
+        <select v-model="selected">
+            <option disabled value="">Please select one</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <span>선택함: {{selected}}</span>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#example-6',
+            data() {
+                return {
+                    selected:''
+                }
+            },
+        })
+    </script>
+
+    <br>
+    <div id="example-7">
+        <select v-model="selected" multiple>
+            <option disabled value="">Please select one</option>
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+        </select>
+        <span>선택함: {{selected}}</span>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#example-7',
+            data() {
+                return {
+                    selected:["B"]
+                }
+            },
+        })
+    </script>
+
+    <br>
+    <div id="example-8">
+        <select v-model="selected">
+            <option v-for="option in options" v-bind:value="option.value">
+                {{option.text}}
+            </option>
+        </select>
+        <span>Selected: {{selected}}</span>
+    </div>
+
+    <script>
+       let app7= new Vue({
+            el:'#example-8',
+            data() {
+                return {
+                    selected: 'A',
+                    options:[
+                        {text:'One', value:'A'},
+                        {text:'Two', value:'B'},
+                        {text:'Three', value:'C'}
+                    ]
+                }
+            },
+        })
+    </script>
+</body>
+</html>

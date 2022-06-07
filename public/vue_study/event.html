@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+    <title>event</title>
+</head>
+<body>
+    <div id="example-1">
+        <button v-on:click="counter+=1">Add 1</button>
+        <p>위 버튼을 클릭한 횟수는 {{counter}}번 입니다.</p>
+    </div>
+
+    <script>
+        let example1 = new Vue({
+            el: '#example-1',
+            data() {
+                return {
+                    counter: 0
+                }
+            },
+        })
+    </script>
+    <br>
+
+    <div id="example-2">
+        <button v-on:click="greet">Greet</button>
+    </div>
+
+    <script>
+        let example2 = new Vue({
+            el:'#example-2',
+            data() {
+                return {
+                    name : 'Vue.js'
+                }
+            },
+            methods: {
+                greet : function(event){
+                    alert('Hello '+this.name+'!')
+                    // 'event'는 네이티브 DOM 이벤트입니다.
+                    if (event) {
+                        alert(event.target.tagName)
+                    }
+                }
+            },
+        })
+    </script>
+
+    <br>
+    <div id="example-3">
+        <button v-on:click="say('hi')">Say hi</button>
+        <button v-on:click="say('what')">Say what</button>
+    </div>
+
+    <script>
+        let example3 = new Vue({
+            el: '#example-3',
+            methods: {
+                say:function(message){
+                    alert(message)
+                }
+            }
+        })
+    </script>
+
+    <br>
+    <div id="example-4"></div>
+</body>
+</html>

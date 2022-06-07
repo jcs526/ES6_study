@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <title>테스트</title>
+    <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+</head>
+
+<body>
+    <div id="test">{{message}}</div>
+    <br>
+    <br>
+    <br>
+    <div id="test2">
+        <ol>
+            <todo-item v-for="item in groceryList" v-bind:todo="item" v-bind:key="item.id">
+            </todo-item>
+        </ol>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div id="test3">
+        <p>원본 메시지: "{{message}}</p>
+        <p>역순으로 표시한 메시지 : "{{reversedMessage}}"</p>
+        <p>역순으로 표시한 메시지(메소드) : "{{reversedMessage2()}}"</p>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div id="watch-example">
+  <p>
+    yes/no 질문을 물어보세요:
+    <input v-model="question">
+  </p>
+  <p>{{ answer }}</p>
+</div>
+    <script>
+        let app = new Vue({
+            el: '#test',
+            data() {
+                return {
+                    message: 'hi'
+                }
+            },
+        })
+
+
+        Vue.component('todo-item', {
+            props: ['todo'],
+            template: '<li>{{todo.text}}</li>'
+        })
+
+        let app2 = new Vue({
+            el: '#test2',
+            data() {
+                return {
+                    groceryList: [
+                        { id: 0, text: 'Vegatables' },
+                        { id: 1, text: 'Cheese' },
+                        { id: 2, text: 'Whatever else humans are supposed to eat' }
+                    ]
+                }
+            },
+        })
+
+        let app3 = new Vue({
+            el: '#test3',
+            data() {
+                return {
+                    message: '안녕하세요'
+                }
+            },
+            computed: {
+                //계산된 getter
+                reversedMessage: function() {
+                    //'this'는 vm 인스턴스를 가리킵니다.
+                    return this.message.split('').reverse().join('')
+                }
+            },
+            methods: {
+                reversedMessage2 : function() {
+                    return this.message.split('').reverse().join('')
+                }
+            },
+        })
+
+
+        var watchExampleVM = new Vue({
+                el: '#watch-example',
+                data: {
+                    question: '',
+                    answer: '질문을 하기 전까지는 대답할 수 없습니다.'
+                },
+                watch: {
+                    // 질문이 변경될 때 마다 이 기능이 실행됩니다.
+                    question: function (newQuestion) {
+                        this.answer = '입력을 기다리는 중...'
+                        this.debouncedGetAnswer()
+                    }
+                },
+                created: function () {
+                    // _.debounce는 lodash가 제공하는 기능으로
+                    // 특히 시간이 많이 소요되는 작업을 실행할 수 있는 빈도를 제한합니다.
+                    // 이 경우, 우리는 yesno.wtf/api 에 액세스 하는 빈도를 제한하고,
+                    // 사용자가 ajax요청을 하기 전에 타이핑을 완전히 마칠 때까지 기다리길 바랍니다.
+                    // _.debounce 함수(또는 이와 유사한 _.throttle)에 대한
+                    // 자세한 내용을 보려면 https://lodash.com/docs#debounce 를 방문하세요.
+                    this.debouncedGetAnswer = _.debounce(this.getAnswer, 500)
+                },
+                methods: {
+                    getAnswer: function () {
+                        if (this.question.indexOf('?') === -1) {
+                            this.answer = '질문에는 일반적으로 물음표가 포함 됩니다. ;-)'
+                            return
+                        }
+                        this.answer = '생각중...'
+                        var vm = this
+                        axios.get('https://yesno.wtf/api')
+                            .then(function (response) {
+                                vm.answer = _.capitalize(response.data.answer)
+                            })
+                            .catch(function (error) {
+                                vm.answer = '에러! API 요청에 오류가 있습니다. ' + error
+                            })
+                    }
+                }
+            })
+    </script>
+
+
+<div id="test5" class="static" v-bind:class="{active: isActive, 'text-danger': hasError}">
+
+</div>
+<script>
+    let app5 = new Vue({
+        el: '#test5',
+        data() {
+            return {
+                isActive : true,
+                hasError : true
+            }
+        },
+    })
+</script>
+
+<div id="test6" v-bind:class="classObject"></div>
+
+<script>
+    let app6 = new Vue({
+        el:"#test6",
+        data() {
+            return {
+                isActive:true,
+                error:null
+            }
+        },
+        computed: {
+            classObject: function(){
+                return{
+                    active:this.isActive&&!this.error,
+                    'text-danger':this.error&&error.type==='fatal'
+                }
+            }
+        }
+    })
+</script>
+
+<div id="test7" v-bind:style="{color: activeColor, fontSize: fontSize + 'px'}">{{message}}</div>
+
+<script>
+    let app7 = new Vue({
+        el:"#test7",
+        data() {
+            return {
+                message : 'test',
+                activeColor : 'red',
+                fontSize : 30
+            }
+        },
+    })
+</script>
+
+<div id="test8" v-if="awesome">보일까요?
+    <template v-if="ok">
+        <h1>Title</h1>
+        <p>Paragraph 1</p>
+        <p>Paragraph 2</p>
+    </template>
+    <p v-else>그럼 대신 이거라도 보일게요</p>
+</div>
+
+<script>
+    let app8 = new Vue({
+        el:"#test8",
+        data() {
+            return {
+                awesome : true,
+                ok : true
+            }
+        },
+    })
+</script>
+<div id="test9">
+<div v-if="type === 'A'">
+    A
+  </div>
+  <div v-else-if="type === 'B'">
+    B
+  </div>
+  <div v-else-if="type === 'C'">
+    C
+  </div>
+  <div v-else>
+    Not A/B/C
+  </div>
+</div>
+<script>
+    let app9 = new Vue({
+        el:"#test9",
+        data() {
+            return {
+                type:'B'
+            }
+        },
+    })
+</script>
+<div id="test10">
+<template v-if="loginType === 'username'">
+    <div>
+    <label>사용자 이름</label>
+    <input placeholder="사용자 이름을 입력하세요">
+</div>
+  </template>
+  <template  v-else>
+      <div>
+    <label>이메일</label>
+    <input placeholder="이메일 주소를 입력하세요">
+</div>
+  </template>
+</div>
+
+<script>
+    let app10 = new Vue({
+        el:"#test10",
+        data() {
+            return {
+                loginType : 'username'
+            }
+        },
+    })
+</script>
+
+
+</body>
+
+</html>

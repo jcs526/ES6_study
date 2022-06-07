@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+    <title>list</title>
+</head>
+<body>
+
+    <h1>v-for 기본사용방법</h1>
+
+    <ul id="example-1">
+        <li v-for="item in items">
+            {{item.message}}
+        </li>
+    </ul>
+    
+    <script>
+        let example1=new Vue({
+            el:'#example-1',
+            data() {
+                return {
+                    items: [
+                        {message:'Foo'},
+                        {message:'Bar'}
+                    ]
+                }
+            },
+        })
+    </script>
+
+    <br>
+    <br>
+    
+    <ul id="example-2">
+        <li v-for="(item,index) in items"> <!-- v-for 첫 인자는 값, 두번째 인자는 인덱스-->
+            {{parentMessage}}-{{index}}={{item.message}}
+        </li>
+    </ul>
+
+    <script>
+        let example2 = new Vue({
+            el: "#example-2",
+            data() {
+                return {
+                    parentMessage: 'Parent',
+                    items:[
+                        {message:'Foo'},
+                        {message:'Bar'}
+                    ]
+                }
+            },
+        })
+    </script>
+    
+    <h1>v-for와 객체</h1>
+    <ul id="v-for-object" class="demo">
+        <li v-for="(value,name,i ) in object">{{i}} , {{name}} : {{value}}</li> 
+        <!-- v-for 에서 첫인자는 값, 두번째 인자는 키, 세번째 인자는 인덱스-->
+    </ul>
+
+    <script>
+        new Vue({
+            el: '#v-for-object',
+            data() {
+                return {
+                    object : {
+                        title : 'How to do lists in Vue',
+                        author : 'Jane Doe',
+                        publishedAt : '2016-04-16'
+                    }
+                }
+            },
+        })
+    </script>
+
+    <h1>배열 변경 감지</h1>
+    <h2>변이 메소드</h2>
+    <ul>
+        <li>push()</li>
+        <li>pop()</li>
+        <li>shift()</li>
+        <li>unshift()</li>
+        <li>splice()</li>
+        <li>sort()</li>
+        <li>reverse()</li>
+    </ul>
+    <h2>배열 대체</h2>
+    <ul>
+        <li>filter()</li>
+        <li>concat()</li>
+        <li>slice()</li>
+    </ul>
+
+    <h1>주의사항</h1>
+    <p>Js의 제한으로 인해 Vue는 배열에 대해 다음과 같은 변경사항을 감지할 수 없습니다</p>
+    <div id="div"></div>
+    <script>
+        $div=document.querySelector('#div');
+        $div.innerText = 
+        `var vm = new Vue({
+            data: {
+                items: ['a', 'b', 'c']
+             }
+        })
+        vm.items[1] = 'x' // reactive하지 않음
+        vm.items.length = 2 // reactive하지 않음`
+    </script>
+    <ol>
+        <li>인덱스로 배열에 있는 항목을 직접 설정하는 경우 , ex) vm.items[indexIfItem]=newValue</li>
+        <li>배열 길이를 수정하는 경우, ex) vm.items.length = newLength</li>
+    </ol>
+    <br>
+
+    <p>이를 극복하기 위하여 다음과 같은 방법을 사용</p>
+    <ol>
+        <li>의 경우 vm.items[indexOfItem]=newValue 대신 <br>
+            Vue.set(vm.items, indexOfItem, newValue)와 //Vue.set 대신 vm.$set도 사용가능 <br>
+            vm.items.splice(indexOfItem,1,newValue) 를 사용</li><br>
+        <li>의 경우 vm.splice(newLength)를 사용해야 합니다.</li>
+    </ol>
+
+    <div id="vm">{{a}}</div>
+    
+    <script>
+        let vm = new Vue({
+            el:'#vm',
+            data() {
+                return {
+                    a:1,
+                    userProfile: {
+                        name : 'Anika'
+                    }
+                }
+            },
+        })
+    </script>
+
+    <h3>리스트에서 짝수 나열하기</h3>
+    <ul id="example-3">
+        <li v-for="n in evenNumbers">{{n}}</li>
+    </ul>
+
+    <script>
+        let example3 = new Vue({
+            el: "#example-3",
+            data() {
+                return {
+                    numbers: [1,2,3,4,5]
+                }
+            },
+            computed: {
+                    evenNumbers: function(){
+                        return this.numbers.filter(function(number){
+                            return number%2 === 0
+                        })
+                    }
+                }
+        })
+    </script>
+
+    <h3>리스트에서 홀수 나열하기</h3>
+    <ul id="example-4">
+        <li v-for="n in odd(numbers)">{{n}}</li>
+    </ul>
+
+    <script>
+        let example4 = new Vue({
+            el:"#example-4",
+            data() {
+                return {
+                    numbers: [1,2,3,4,5]
+                }
+            },
+            methods: {
+                odd : function(numbers){
+                    return numbers.filter(function(number){
+                        return number % 2 !==0
+                    })
+                }
+            },
+        })
+    </script>
+
+    <!-- <div>
+        <span v-for="n in 10" > {{ n }} </span>
+    </div>
+    이유는 알수 없으나 안됨 -->
+
+    <ul id = "example-5">
+        <li v-for="n in todos" v-if="n!=='나'">{{n}}</li>
+    </ul>
+
+    <script>
+        let example5 = new Vue({
+            el:"#example-5",
+            data() {
+                return {
+                    todos : ['가','나','다','라']
+                }
+            },
+        })
+    </script>
+    <!-- 실행을 조건부로 하는것이 목적이라면 <tamplate> 사용을 추천-->
+    <br>
+
+    <div id="todo-list-example">
+        <form v-on:submit.prevent="addNewTodo">
+            <label for="new-todo">Add a todo</label>
+            <input 
+                v-model="newTodoText"
+                id="new-todo"
+                placeholder="E.g. Feed the cat"
+            >
+            <button>Add</button>
+        </form>
+        <ul>
+            <li
+            is="todo-item"
+            v-for="(todo,index) in todos"
+            v-bind:key="todo.id"
+            v-bind:title="todo.title"
+            v-on:remove="todos.splice(index,1)"
+            ></li>
+        </ul>
+    </div>
+
+    <script>
+        Vue.component('todo-item',{
+            template: '\
+            <li>\
+                {{title}}\
+                <button v-on:click="$emit(\'remove\')">Remove</button>\
+                </li>\
+                ',
+                props: ['title']
+        })
+
+        new Vue({
+            el: '#todo-list-example',
+            data() {
+                return {
+                    newTodoText: '',
+                    todos: [
+                        {
+                            id:1,
+                            title:'Do the dishes',
+                        },
+                        {
+                            id:2,
+                            title:'Take out the trash',
+                        },
+                        {
+                            id:3,
+                            title:'Mow the lawn'
+                        }
+                    ],
+                    nextTodoId:4
+                }
+                
+            },
+            methods:{
+                    addNewTodo: function(){
+                        this.todos.push({
+                            id:this.nextTodoId++,
+                            title:this.newTodoText
+                        })
+                        this.newTodoText=''
+                    }
+                }
+        })
+    </script>
+</body>
+</html>
