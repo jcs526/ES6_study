@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+    <title>component</title>
+</head>
+<body>
+
+    <div id="example">
+        <my-component></my-component>
+        <br>
+
+        <simple-counter></simple-counter>
+        <simple-counter></simple-counter>
+        <simple-counter></simple-counter>
+
+        
+        <br>
+        <child message="안녕하세요!!"></child>
+
+        <br>
+        <input v-model="parentMsg">
+        <br>
+        <child v-bind:my-message="parentMsg"></child>
+        
+        <br>
+        <div v-bind="todo">{{todo.text}}</div>
+
+        <br>
+        <button @click="increase(index)" v-for="(count,index) in counts">{{count}}</button>
+        
+        <br>
+        <p>{{total}}</p>
+        <button-counter v-on:increment="incrementTotal"></button-counter>
+        <button-counter v-on:increment="incrementTotal"></button-counter>
+
+        <br>
+        <div v-bind="post">{{post.id}}{{ post.title}}</div>
+    </div>
+
+    
+    <script>
+
+
+        
+         Vue.component('my-component', {
+            template: '<div>사용자 정의 컴포넌트 입니다!</div>'
+        })
+
+        const Child = {
+            template: '<div>사용자 정의 컴포넌트 입니다?</div>'
+        }
+
+        
+        //컴포넌트의 data는 항상 함수여야 한다
+
+        // let data = {counter : 0}
+
+        Vue.component('simple-counter',{
+            template:'<button v-on:click="counter += 1">{{counter}}</button>',
+            //데이터는 기술적으로 함수이므로 Vue는 따지지 않지만
+            //각 컴포넌트 인스턴스에 대해 같은 객체 참조를 반환합니다.
+            data: function () {
+                // return data
+                return{
+                    counter : 0
+                }
+            }
+        })
+
+
+        
+        //컴포넌트는 props와 events를 이용하여 의사소통합니다
+        //부모는 자식에게 props를 통하여 데이터를 전달하고, 자식은 events를 통하여 부모에게 메시지를 보냅니다.
+
+        
+
+        Vue.component('example',{
+            props:{
+                //기본 타입 확인 ('null'은 어떤 타입이든 가능하다는 뜻입니다) 대충 숫자라는 뜻
+                propA : Number,
+                //여러개 가능한 타입
+                propB: [String, Number],
+                //문자열이며 꼭 필요합니다
+                propC: {
+                    type: String,
+                    required: true
+                },
+                propD: {
+                    type:Number,
+                    default:100
+                },
+                // 객체/배열의 기본값은 팩토리 함수에서 반환되어야 합니다.
+                propE: {
+                    type:Object,
+                    default:function(){
+                        return{message:'hello'}
+                    }
+                },
+                //사용자 저으이 유효성 검사기능
+                propE: {
+                    validateor: function (value) {
+                        return value>10
+                    }
+                }
+            }
+        })
+
+
+        Vue.component('button-counter',{
+            template: '<button v-on:click="incrementCounter">{{counter}}</button>',
+            data:function () {
+                return{
+                    counter:0
+                }
+            },
+            methods:{
+                incrementCounter: function(){
+                    this.counter+=1
+                    this.$emit('increment')
+                }
+            }
+        })
+
+
+        
+        let app = new Vue({
+            el: "#example",
+            data:{
+                parentMsg: '부모로부터 전달 받은 메세지',
+                todo:{
+                    text:'Learn Vue',
+                    isComplete: false
+                },
+                counts:[0, 0, 0],
+                total:0,
+                post:{
+                    id:1,
+                    title:'My Journey with Vue'
+                }
+            },
+            components:{
+                'my-component':Child, //'my-component'에 Child를 배당
+                'child':{
+                    props:['myMessage'],
+                    template:'<span>{{myMessage}}</span>'
+                }
+            },
+            methods: {
+                increase(index){
+                    return this.counts.splice(index,1,++this.counts[index]);
+                },
+                incrementTotal:function(){
+                    this.total+=1
+                }
+            },
+        })
+        // 컴포넌트, 인스턴스 순서 상관있음 / 반대로 작성시 컴포넌트 작동안함
+       
+
+
+        Vue.component('my-component')
+
+       
+    </script>
+</body>
+</html>
